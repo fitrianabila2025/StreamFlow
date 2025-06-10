@@ -221,7 +221,7 @@ docker-compose restart
 
 #### 4. Deploy di Platform seperti Phala Cloud
 
-- Login ke [Phala Cloud](https://phalacloud.app) atau platform serupa.
+- Login ke [Phala Cloud](https://cloud.phala.network/) atau platform serupa.
 - Buat proyek baru dan unggah `docker-compose.yml` di atas.
 - Jika diperlukan, atur environment variables di dashboard:
   ```
