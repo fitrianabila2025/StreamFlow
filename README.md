@@ -366,4 +366,4 @@ docker-compose up -d
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/fitrianabila2025/StreamFlow/blob/main/LICENSE)
 
-© 2025 - [Fitri Anabila](https://github.com/fitrianabila2025) | Berdasarkan karya asli [Bang Tutorial](https://youtube.com/bangtutorial)
+© 2025 - [Fitria Nabila](https://github.com/fitrianabila2025) | Berdasarkan karya asli [Bang Tutorial](https://youtube.com/bangtutorial)
