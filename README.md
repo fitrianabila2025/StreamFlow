@@ -27,7 +27,7 @@ StreamFlow adalah aplikasi live streaming yang memungkinkan kamu untuk melakukan
 
 ## 🛠️ Instalasi
 
-StreamFlow dapat diinstal secara manual di VPS atau menggunakan Docker untuk deployment yang lebih mudah, termasuk di platform seperti Phala Cloud, Railway, atau lainnya yang mendukung Docker Compose.
+StreamFlow dapat diinstal secara manual di VPS atau menggunakan Docker untuk deployment yang lebih mudah, termasuk di platform seperti Phala Cloud yang mendukung Docker Compose.
 
 ### Pilihan 1: Instalasi Manual di VPS
 
@@ -76,8 +76,8 @@ sudo apt install git -y
 Clone repository ke VPS:
 
 ```bash
-git clone https://github.com/bangtutorial/streamflow
-cd streamflow
+git clone https://github.com/fitrianabila2025/StreamFlow
+cd StreamFlow
 ```
 
 Install dependencies:
@@ -136,7 +136,7 @@ pm2 restart streamflow
 
 ### Pilihan 2: Instalasi Menggunakan Docker
 
-StreamFlow mendukung deployment menggunakan Docker dan Docker Compose, cocok untuk VPS atau platform seperti Phala Cloud.
+StreamFlow mendukung deployment menggunakan Docker, baik melalui perintah `docker run` untuk VPS sederhana atau `docker-compose` untuk platform seperti Phala Cloud.
 
 #### 1. Persiapan Docker
 
@@ -161,37 +161,31 @@ docker --version
 docker-compose --version
 ```
 
-#### 2. Clone Repository
+#### 2. Deploy Menggunakan docker run
+
+Jalankan container menggunakan image `fitrianabila2025/streamflow:latest`:
 
 ```bash
-git clone https://github.com/bangtutorial/streamflow
-cd streamflow
+docker run -d \
+  --name streamflow \
+  -p 7575:7575 \
+  -e PORT=7575 \
+  -e TZ=Asia/Jakarta \
+  -v streamflow-data:/app/public/uploads \
+  -v streamflow-db:/app/db \
+  --restart unless-stopped \
+  fitrianabila2025/streamflow:latest
 ```
 
-#### 3. Buat Dockerfile
+Akses aplikasi di `http://<IP_SERVER>:7575`, buat username dan password, lalu restart container:
 
-Buat file `Dockerfile` di direktori proyek:
-
-```Dockerfile
-FROM node:22-slim
-WORKDIR /app
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-COPY package*.json ./
-RUN npm install
-RUN npm install -g pm2
-COPY . .
-RUN npm run generate-secret
-RUN mkdir -p public/uploads && chmod -R 755 public/uploads
-EXPOSE 7575
-CMD ["pm2-runtime", "app.js", "--name", "streamflow"]
+```bash
+docker restart streamflow
 ```
 
-#### 4. Buat docker-compose.yml
+#### 3. Deploy Menggunakan Docker Compose
 
-Buat file `docker-compose.yml` untuk deployment lokal atau di platform seperti Phala Cloud:
+Buat file `docker-compose.yml` di direktori proyek:
 
 ```yaml
 services:
@@ -213,30 +207,6 @@ volumes:
   streamflow-db:
 ```
 
-#### 5. Build dan Push Image ke Docker Hub
-
-Build image:
-
-```bash
-docker-compose build
-```
-
-Login ke Docker Hub:
-
-```bash
-docker login
-```
-
-Push image:
-
-```bash
-docker push fitrianabila2025/streamflow:latest
-```
-
-**Catatan**: Pastikan repository `streamflow` sudah dibuat di akun Docker Hub Anda (`fitrianabila2025`).
-
-#### 6. Deploy di VPS
-
 Jalankan aplikasi:
 
 ```bash
@@ -249,7 +219,7 @@ Akses di `http://<IP_SERVER>:7575`, buat username dan password, lalu restart:
 docker-compose restart
 ```
 
-#### 7. Deploy di Platform seperti Phala Cloud
+#### 4. Deploy di Platform seperti Phala Cloud
 
 - Login ke [Phala Cloud](https://phalacloud.app) atau platform serupa.
 - Buat proyek baru dan unggah `docker-compose.yml` di atas.
@@ -274,7 +244,7 @@ Jika lupa password atau ingin reset:
 Masuk ke folder aplikasi:
 
 ```bash
-cd streamflow
+cd StreamFlow
 ```
 
 Jalankan perintah reset password:
@@ -341,7 +311,11 @@ Fix izin folder uploads:
 chmod -R 755 public/uploads/
 ```
 
-Untuk Docker, pastikan direktori dibuat di `Dockerfile`.
+Untuk Docker, pastikan volume memiliki izin yang sesuai:
+
+```bash
+docker volume inspect streamflow-data
+```
 
 ### Port Already in Use
 
@@ -381,8 +355,15 @@ docker-compose up -d
 
 ### Docker-Specific Issues
 
-- **Image Not Found**: Pastikan `fitrianabila2025/streamflow:latest` sudah di-push ke Docker Hub.
-- **Build Fails**: Verifikasi semua file proyek (`package.json`, `app.js`) ada di direktori.
-- **Port Not Accessible**: Ubah port di `docker-compose.yml` jika 7575 diblokir (misalnya, `- "80:7575"`).
+- **Image Not Found**: Pastikan `fitrianabila2025/streamflow:latest` tersedia di Docker Hub.
+- **Port Not Accessible**: Jika port 7575 diblokir, ubah di `docker-compose.yml` (misalnya, `- "80:7575"`) atau cek pengaturan firewall platform.
+- **Container Exits**: Periksa log untuk error:
+  ```bash
+  docker logs streamflow
+  ```
 
-© 2025 - [fitrianabila2025](https://github.com/fitrianabila2025/StreamFlow)
+## Lisensi
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/fitrianabila2025/StreamFlow/blob/main/LICENSE)
+
+© 2025 - [Fitri Anabila](https://github.com/fitrianabila2025) | Berdasarkan karya asli [Bang Tutorial](https://youtube.com/bangtutorial)
