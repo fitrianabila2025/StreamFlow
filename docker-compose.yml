@@ -1,0 +1,20 @@
+services:
+  streamflow:
+    image: fitrianabila2025/streamflow:latest
+    container_name: streamflow
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=7575
+      - TZ=Asia/Jakarta
+    ports:
+      - "7575:7575"
+    volumes:
+      - streamflow-data:/app/public/uploads
+      - streamflow-db:/app/db
+    restart: unless-stopped
+
+volumes:
+  streamflow-data:
+  streamflow-db:
